@@ -1,0 +1,7 @@
+function [cluster] = put_into_cluster(band1,band2,band3,band4,cluster,x,y)
+% puts the point (x,y) into appropriate cluster
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+point = [band1(x,y) band2(x,y) band3(x,y) band4(x,y)];
+
+cluster=1;
+dist=sqrt(sum(point-

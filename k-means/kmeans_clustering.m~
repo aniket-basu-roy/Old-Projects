@@ -1,0 +1,50 @@
+function [cluster] = kmeans_clustering(k)
+% This function clusters points
+% ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[band1,band2,band3,band4] = scale_image();
+[cluster] = choose_seed(band1,band2,band3,band4,k);
+
+disp('Starting kmeans');
+iteration = 1;
+
+while 1
+    disp(['Iteration number is ',num2str(iteration)]);
+    iteration=iteration+1;
+    cluster= cluster_points(band1,band2,band3,band4,cluster,k);
+    disp('Clustering of points done..');
+    cluster_mean = calculate_mean(band1,band2,band3,band4,cluster,k)
+    disp('Mean calculation done...');
+    prev_mean=[];
+    for i=1:k
+        prev_mean(i,:)=cluster{i}.mean;
+    end
+        if sum(sum(cluster_mean - prev_mean))== 0
+    
+%    if iteration == 100
+        break;
+    else
+        for i=1:k
+            cluster{i}.data=[];
+            cluster{i}.count=0;
+            cluster{i}.mean = cluster_mean(i,:);
+        end
+    end
+end
+
+image=[];
+for i=1:k
+    noe=cluster{i}.count;
+    value=round((255/(k-1))*(i-1));
+    for j=1:noe
+        x=cluster{i}.data(j,1);
+        y=cluster{i}.data(j,2);
+        image(x,y)=value;
+    end
+end
+
+imwrite(uint8(image),'cluster_4.gif','gif');
+
+            
+        
+    
